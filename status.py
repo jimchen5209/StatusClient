@@ -30,12 +30,12 @@ class Status:
             'name': name,
             'pid': os.getpid(),
             'cmdline': sys.argv,
-            'online': False
+            'closed': False
         }
         self.__filename = name.replace(" ", "_")
 
-    def set_status(self, online: bool):
-        self.__data['online']= online
+    def set_status(self, closed: bool = False):
+        self.__data['closed'] = closed
         if os.path.isdir(self.__path):
             with open("{path}/{name}.json".format(path=self.__path, name=self.__filename), 'w', encoding='UTF-8') as fs:
                 json.dump(self.__data, fs, ensure_ascii=False)
