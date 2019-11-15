@@ -21,17 +21,21 @@ import os
 import sys
 from pathlib import Path
 
-path = str(Path.home()) + '/.bot_status'
 
+class Status:
+    __path = str(Path.home()) + '/.bot_status'
 
-def set_status(name: str):
-    if os.path.isdir(path):
-        with open("{path}/{name}.json".format(path=path, name=name), 'w', encoding='UTF-8') as fs:
-            json.dump({
-                'name': name,
-                'pid': os.getpid(),
-                'cmdline': sys.argv
-            },
-                fs,
-                ensure_ascii=False
-            )
+    def __init__(self, name: str):
+        self.__data = {
+            'name': name,
+            'pid': os.getpid(),
+            'cmdline': sys.argv,
+            'online': False
+        }
+        self.__filename = name.replace(" ", "_")
+
+    def set_status(self, online: bool):
+        self.__data['online']= online
+        if os.path.isdir(self.__path):
+            with open("{path}/{name}.json".format(path=self.__path, name=self.__filename), 'w', encoding='UTF-8') as fs:
+                json.dump(self.__data, fs, ensure_ascii=False)
